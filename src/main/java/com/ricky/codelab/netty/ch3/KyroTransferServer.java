@@ -1,5 +1,7 @@
-package com.ricky.codelab.netty.ch2;
+package com.ricky.codelab.netty.ch3;
 
+import com.ricky.codelab.netty.ch3.serialiaztion.KyroMsgDecoder;
+import com.ricky.codelab.netty.ch3.serialiaztion.KyroMsgEncoder;
 import com.ricky.codelab.netty.util.Constant;
 
 import io.netty.bootstrap.ServerBootstrap;
@@ -8,20 +10,17 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.serialization.ClassResolvers;
-import io.netty.handler.codec.serialization.ObjectDecoder;
-import io.netty.handler.codec.serialization.ObjectEncoder;
 
 /**
- * Netty4.x 对象传递
+ * Netty4.x 自定义Decoder，Encoder进行对象传递
  * @author Ricky
  *
  */
-public class POJOTranferServer {
+public class KyroTransferServer {
 
 	private final int port;
 
-	public POJOTranferServer(int port) {
+	public KyroTransferServer(int port) {
 		this.port = port;
 	}
 
@@ -34,9 +33,9 @@ public class POJOTranferServer {
 					.childHandler(new ChannelInitializer<SocketChannel>() {
 						@Override
 						public void initChannel(SocketChannel ch) throws Exception {
-							ch.pipeline().addLast(new ObjectEncoder(),
-									new ObjectDecoder(Integer.MAX_VALUE, ClassResolvers.cacheDisabled(null)),
-									new POJOTransferServerHandler());
+							ch.pipeline().addLast(new KyroMsgEncoder(),
+									new KyroMsgDecoder(),
+									new KyroServerHandler());
 						}
 					});
 
@@ -50,6 +49,6 @@ public class POJOTranferServer {
 
 	public static void main(String[] args) throws Exception {
 
-		new POJOTranferServer(Constant.PORT).run();
+		new KyroTransferServer(Constant.PORT).run();
 	}
 }
