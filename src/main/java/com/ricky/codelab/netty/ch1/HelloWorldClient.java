@@ -12,6 +12,11 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
+/**
+ * Hello world Client.
+ * @author Ricky
+ *
+ */
 public class HelloWorldClient {
 	private String host;
 	private int port;

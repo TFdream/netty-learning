@@ -13,7 +13,9 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
 /**
- * Discards any incoming data.
+ * Hello world Server.
+ * @author Ricky
+ *
  */
 public class HelloWorldServer {
 	private int port;
