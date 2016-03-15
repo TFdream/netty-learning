@@ -22,7 +22,7 @@ public class POJOTransferClientHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         // Send the message to Server
         super.channelActive(ctx);
-        System.out.println("client send message");
+        System.out.println("client send message:"+message);
         ctx.writeAndFlush(message);
     }
 
@@ -30,7 +30,7 @@ public class POJOTransferClientHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg)
             throws Exception {
         // you can use the Object from Server here
-        System.out.println("client receive:"+msg);
+        System.out.println("client receive msg:"+msg);
         ctx.close();
     }
 

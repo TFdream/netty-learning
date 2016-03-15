@@ -1,20 +1,17 @@
 package com.ricky.codelab.netty.ch3;
 
-import java.util.List;
-
-import com.ricky.codelab.netty.model.User;
-
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import com.ricky.codelab.netty.model.Car;
 
 public class KyroClientHandler extends ChannelInboundHandlerAdapter {
 
-    private final List<User> message;
+    private final Car message;
 
     /**
      * Creates a client-side handler.
      */
-    public KyroClientHandler(List<User> message) {
+    public KyroClientHandler(Car message) {
     	this.message = message;
     }
 
@@ -22,7 +19,8 @@ public class KyroClientHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         // Send the message to Server
         super.channelActive(ctx);
-        System.out.println("client send message");
+        
+        System.out.println("client send message:"+message);
         ctx.writeAndFlush(message);
     }
 
@@ -30,7 +28,7 @@ public class KyroClientHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg)
             throws Exception {
         // you can use the Object from Server here
-        System.out.println("client receive:"+msg);
+        System.out.println("client receive msg:"+msg);
         ctx.close();
     }
 

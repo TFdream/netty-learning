@@ -9,7 +9,7 @@ public class POJOTransferServerHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg)
             throws Exception {
     	
-        System.out.println("server receive:"+msg);
+        System.out.println("server receive msg:"+msg);
         ctx.writeAndFlush(msg);
     }
 

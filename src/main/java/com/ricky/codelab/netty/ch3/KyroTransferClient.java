@@ -1,13 +1,5 @@
 package com.ricky.codelab.netty.ch3;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.ricky.codelab.netty.ch3.serialiaztion.KyroMsgDecoder;
-import com.ricky.codelab.netty.ch3.serialiaztion.KyroMsgEncoder;
-import com.ricky.codelab.netty.model.User;
-import com.ricky.codelab.netty.util.Constant;
-
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -16,12 +8,17 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
+import com.ricky.codelab.netty.ch3.serialiaztion.KyroMsgDecoder;
+import com.ricky.codelab.netty.ch3.serialiaztion.KyroMsgEncoder;
+import com.ricky.codelab.netty.model.Car;
+import com.ricky.codelab.netty.util.Constant;
+
 public class KyroTransferClient {
 	private String host;
 	private int port;
-	private List<User> message;
+	private Car message;
 
-	public KyroTransferClient(String host, int port, List<User> message) {
+	public KyroTransferClient(String host, int port, Car message) {
 		this.host = host;
 		this.port = port;
 		this.message = message;
@@ -53,16 +50,11 @@ public class KyroTransferClient {
 
 	public static void main(String[] args) throws Exception {
 		
-		final List<User> message = new ArrayList<>();
-		for(int i=0;i<5;i++){
-			
-			User user = new User();
-			user.setId(i+1);
-			user.setName("Ricky P"+i);
-			user.setAge(20+i);
-			
-			message.add(user);
-		}
+		Car message = new Car();
+		message.setName("X5");
+		message.setBrand("BMW");
+		message.setPrice(52.6);
+		message.setSpeed(200);
 
 		new KyroTransferClient(Constant.HOST, Constant.PORT, message).send();
 	}
