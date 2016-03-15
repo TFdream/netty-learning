@@ -15,7 +15,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
 /**
- * 自定义Decoder 继承ByteToMessageDecoder
+ * 自定义Decoder
  * @author Ricky
  *
  */
@@ -28,7 +28,7 @@ public class KyroMsgDecoder extends ByteToMessageDecoder {
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
 		
-		if (in.readableBytes() < HEAD_LENGTH) {  //这个HEAD_LENGTH是我们用于表示头长度的字节数。  由于上面我们传的是一个int类型的值，所以这里HEAD_LENGTH的值为4.
+		if (in.readableBytes() < HEAD_LENGTH) {  //这个HEAD_LENGTH是我们用于表示头长度的字节数。  由于Encoder中我们传的是一个int类型的值，所以这里HEAD_LENGTH的值为4.
             return;
         }
         in.markReaderIndex();                  //我们标记一下当前的readIndex的位置
@@ -42,8 +42,8 @@ public class KyroMsgDecoder extends ByteToMessageDecoder {
             return;
         }
  
-        byte[] body = new byte[dataLength];  //  嗯，这时候，我们读到的长度，满足我们的要求了，把传送过来的数据，取出来吧~~
-        in.readBytes(body);  //
+        byte[] body = new byte[dataLength];  //传输正常
+        in.readBytes(body);
         Object o = convertToObject(body);  //将byte数据转化为我们需要的对象
         out.add(o);
 	}
