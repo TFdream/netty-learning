@@ -1,7 +1,5 @@
 package com.bytebeats.netty4.sample.ch4;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;
@@ -19,9 +17,10 @@ public class HelloServerHandler extends ChannelInboundHandlerAdapter {
         String body = (String) msg;
         logger.info("server read msg:{}, count:{}", body, count);
 
-        String response = "hello from server"+System.getProperty("line.separator");
-        ByteBuf buf = Unpooled.copiedBuffer(response.getBytes());
-        ctx.writeAndFlush(buf);
+//        String response = "hello from server"+System.getProperty("line.separator");
+        String response = "hello from server"+"$";
+        ctx.writeAndFlush(response);
+
     }
 
     @Override
