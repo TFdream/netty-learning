@@ -2,22 +2,31 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.bytebeats</groupId>
-	<artifactId>netty4-samples</artifactId>
+	<groupId>com.bytebeats.netty4</groupId>
+	<artifactId>netty4-in-action</artifactId>
 	<version>1.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 
-	<name>netty4-samples</name>
+	<name>netty4-in-action</name>
 	<url>http://maven.apache.org</url>
+
+	<modules>
+		<module>netty4-ch1-echo</module>
+		<module>netty4-ch2-pojo</module>
+		<module>netty4-common</module>
+		<module>netty4-ch3-frame</module>
+		<module>netty4-ch4-serialization</module>
+		<module>netty4-ch5-reconnect</module>
+	</modules>
 
 	<properties>
 		<java.version>1.7</java.version>
-		<maven.compiler.version>3.1</maven.compiler.version>
 		<junit.version>4.12</junit.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<dependencies>
+	<dependencyManagement>
+		<dependencies>
 		<!-- Netty -->
 		<dependency>
 			<groupId>io.netty</groupId>
@@ -76,17 +85,18 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven.compiler.version}</version>
+				<version>3.1</version>
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
