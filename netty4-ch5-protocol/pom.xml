@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>netty4-ch5-reconnect</artifactId>
+    <artifactId>netty4-ch5-protocol</artifactId>
     <packaging>jar</packaging>
 
-    <name>netty4-ch5-reconnect</name>
+    <name>netty4-ch5-protocol</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -28,6 +28,11 @@
             <groupId>com.bytebeats.netty4</groupId>
             <artifactId>netty4-common</artifactId>
             <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.caucho</groupId>
+            <artifactId>hessian</artifactId>
         </dependency>
 
         <!--log-->

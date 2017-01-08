@@ -11,12 +11,12 @@
 	<url>http://maven.apache.org</url>
 
 	<modules>
+		<module>netty4-common</module>
 		<module>netty4-ch1-echo</module>
 		<module>netty4-ch2-pojo</module>
-		<module>netty4-common</module>
 		<module>netty4-ch3-frame</module>
 		<module>netty4-ch4-serialization</module>
-		<module>netty4-ch5-reconnect</module>
+		<module>netty4-ch5-protocol</module>
 	</modules>
 
 	<properties>
