@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  */
 public class HeartBeatRespHandler extends ChannelInboundHandlerAdapter {
 
-    private final Logger LOG = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg)
@@ -26,10 +26,10 @@ public class HeartBeatRespHandler extends ChannelInboundHandlerAdapter {
         if (message.getHeader() != null
                 && message.getHeader().getType() == MessageType.HEARTBEAT_REQ
                 .value()) {
-            LOG.info("Receive client heart beat message : ---> "
+            logger.info("Receive client heart beat message : ---> "
                     + message);
             NettyMessage heartBeat = buildHeatBeat();
-            LOG.info("Send heart beat response message to client : ---> "
+            logger.info("Send heart beat response message to client : ---> "
                     + heartBeat);
             ctx.writeAndFlush(heartBeat);
         } else

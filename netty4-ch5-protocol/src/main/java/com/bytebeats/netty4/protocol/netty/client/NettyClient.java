@@ -12,6 +12,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
@@ -26,15 +28,16 @@ import java.util.concurrent.TimeUnit;
  */
 public class NettyClient {
 
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
     private ScheduledExecutorService executor = Executors
             .newScheduledThreadPool(1);
 
-    EventLoopGroup group = new NioEventLoopGroup();
+    private EventLoopGroup group = new NioEventLoopGroup();
 
     public void connect(int port, String host) throws Exception {
 
         // 配置客户端NIO线程组
-
         try {
             Bootstrap b = new Bootstrap();
             b.group(group).channel(NioSocketChannel.class)
@@ -57,9 +60,10 @@ public class NettyClient {
                     });
             // 发起异步连接操作
             ChannelFuture future = b.connect(
-                    new InetSocketAddress(host, port),
-                    new InetSocketAddress(Constants.HOST,
-                            Constants.PORT)).sync();
+                    new InetSocketAddress(host, port)).sync();
+
+            logger.info("client connect host:{}, port:{}", host, port);
+
             // 当对应的channel关闭的时候，就会返回对应的channel。
             // Returns the ChannelFuture which will be notified when this channel is closed. This method always returns the same future instance.
             future.channel().closeFuture().sync();

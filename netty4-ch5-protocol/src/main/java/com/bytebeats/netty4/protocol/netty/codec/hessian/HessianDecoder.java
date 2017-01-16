@@ -14,6 +14,10 @@ import java.io.IOException;
  */
 public class HessianDecoder extends AbstractMsgDecoder {
 
+    public HessianDecoder(Class type) {
+        super(type);
+    }
+
     @Override
     protected Object convertToObject(byte[] data) throws IOException {
 

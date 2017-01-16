@@ -16,10 +16,11 @@ import org.slf4j.LoggerFactory;
  */
 public class LoginAuthReqHandler extends ChannelInboundHandlerAdapter {
 
-    private final Logger LOG = LoggerFactory.getLogger(HeartBeatReqHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(HeartBeatReqHandler.class);
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        logger.info("client login-auth active");
         ctx.writeAndFlush(buildLoginReq());
     }
 
@@ -27,6 +28,8 @@ public class LoginAuthReqHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg)
             throws Exception {
         NettyMessage message = (NettyMessage) msg;
+
+        logger.info("client login-auth read msg : {}", message);
 
         // 如果是握手应答消息，需要判断是否认证成功
         if (message.getHeader() != null
@@ -37,7 +40,7 @@ public class LoginAuthReqHandler extends ChannelInboundHandlerAdapter {
                 // 握手失败，关闭连接
                 ctx.close();
             } else {
-                LOG.info("Login is ok : " + message);
+                logger.info("Login is ok : {}", message);
                 ctx.fireChannelRead(msg);
             }
         } else

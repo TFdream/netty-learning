@@ -13,6 +13,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.timeout.ReadTimeoutHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -23,6 +25,8 @@ import java.io.IOException;
  * @create 2017-01-08 22:15
  */
 public class NettyServer {
+
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     public void bind() throws Exception {
         // 配置服务端的NIO线程组
@@ -49,8 +53,8 @@ public class NettyServer {
 
         // 绑定端口，同步等待成功
         b.bind(Constants.HOST, Constants.PORT).sync();
-        System.out.println("Netty server start ok : "
-                + (Constants.HOST + " : " + Constants.PORT));
+        logger.info("Netty server start ok host:{}, port:{}"
+                , Constants.HOST , Constants.PORT);
     }
 
     public static void main(String[] args) throws Exception {

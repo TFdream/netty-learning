@@ -23,7 +23,7 @@ public class TestCodeC {
     AbstractMsgDecoder marshallingDecoder;
 
     public TestCodeC() throws IOException {
-        marshallingDecoder = new HessianDecoder();
+        marshallingDecoder = new HessianDecoder(NettyMessage.class);
         marshallingEncoder = new HessianEncoder();
     }
 

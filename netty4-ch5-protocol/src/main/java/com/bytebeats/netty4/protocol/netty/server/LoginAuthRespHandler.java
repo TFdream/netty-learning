@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class LoginAuthRespHandler extends ChannelInboundHandlerAdapter {
 
-    private final Logger LOG = LoggerFactory.getLogger(LoginAuthRespHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(LoginAuthRespHandler.class);
 
     private Map<String, Boolean> nodeCheck = new ConcurrentHashMap<String, Boolean>();
     private String[] whitekList = { "127.0.0.1", "192.168.1.104" };
@@ -28,7 +28,7 @@ public class LoginAuthRespHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg)
             throws Exception {
         NettyMessage message = (NettyMessage) msg;
-
+        logger.info("server login-auth read msg:{}", msg);
         // 如果是握手请求消息，处理，其它消息透传
         if (message.getHeader() != null
                 && message.getHeader().getType() == MessageType.LOGIN_REQ
@@ -54,7 +54,7 @@ public class LoginAuthRespHandler extends ChannelInboundHandlerAdapter {
                 if (isOK)
                     nodeCheck.put(nodeIndex, true);
             }
-            LOG.info("The login response is : " + loginResp
+            logger.info("The login response is : " + loginResp
                     + " body [" + loginResp.getBody() + "]");
             ctx.writeAndFlush(loginResp);
         } else {

@@ -10,8 +10,8 @@
 
     <appender name="Info" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_HOME}/info/netty4-ch1-info.log</file>
-        <appender>true</appender>
-        <Encoding>UTF-8</Encoding>
+        <append>true</append>
+        <charset>UTF-8</charset>
 
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>

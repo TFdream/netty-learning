@@ -1,7 +1,6 @@
 package com.bytebeats.netty4.protocol.netty.codec;
 
 import io.netty.buffer.ByteBuf;
-
 import java.io.IOException;
 
 /**
@@ -10,10 +9,15 @@ import java.io.IOException;
  * @author Ricky Fung
  * @create 2017-01-08 21:57
  */
-public abstract class AbstractMsgDecoder {
+public abstract class AbstractMsgDecoder<T> {
     private static final int HEAD_LENGTH = 4;
 
-    public Object decode(ByteBuf in) throws Exception {
+    protected Class<T> type;
+    public AbstractMsgDecoder(Class<T> type){
+        this.type = type;
+    }
+
+    public T decode(ByteBuf in) throws Exception {
         if (in.readableBytes() < HEAD_LENGTH) {
             System.out.println("head length < 4");
             return null;
@@ -32,7 +36,7 @@ public abstract class AbstractMsgDecoder {
         ByteBuf buf = in.slice(in.readerIndex(), objectSize);
         byte[] body = new byte[objectSize];
         buf.readBytes(body);
-        Object obj = convertToObject(body);
+        T obj = (T) convertToObject(body);
         in.readerIndex(in.readerIndex() + objectSize);
         return obj;
     }

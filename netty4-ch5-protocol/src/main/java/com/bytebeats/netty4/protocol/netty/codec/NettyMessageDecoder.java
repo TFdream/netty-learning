@@ -24,7 +24,7 @@ public class NettyMessageDecoder extends LengthFieldBasedFrameDecoder {
     public NettyMessageDecoder(int maxFrameLength, int lengthFieldOffset,
                                int lengthFieldLength) throws IOException {
         super(maxFrameLength, lengthFieldOffset, lengthFieldLength);
-        marshallingDecoder = new HessianDecoder();
+        marshallingDecoder = new HessianDecoder(NettyMessage.class);
     }
 
     @Override

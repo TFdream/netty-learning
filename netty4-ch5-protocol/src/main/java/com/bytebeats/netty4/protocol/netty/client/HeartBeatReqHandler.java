@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
  */
 public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
 
-    private final Logger LOG = LoggerFactory.getLogger(HeartBeatReqHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(HeartBeatReqHandler.class);
 
     private volatile ScheduledFuture<?> heartBeat;
 
@@ -38,7 +38,7 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
         } else if (message.getHeader() != null
                 && message.getHeader().getType() == MessageType.HEARTBEAT_RESP
                 .value()) {
-            LOG.info("Client receive server heart beat message : ---> "
+            logger.info("Client receive server heart beat message : ---> "
                     + message);
         } else
             ctx.fireChannelRead(msg);
@@ -54,7 +54,7 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
         @Override
         public void run() {
             NettyMessage heatBeat = buildHeatBeat();
-            LOG.info("Client send heart beat messsage to server : ---> "
+            logger.info("Client send heart beat messsage to server : ---> "
                     + heatBeat);
             ctx.writeAndFlush(heatBeat);
         }
