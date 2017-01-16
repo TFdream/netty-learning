@@ -17,6 +17,7 @@
 		<module>netty4-ch3-frame</module>
 		<module>netty4-ch4-codec</module>
 		<module>netty4-ch5-protocol</module>
+		<module>netty4-ch6-ssl</module>
 	</modules>
 
 	<properties>
