@@ -15,7 +15,7 @@
 		<module>netty4-ch1-echo</module>
 		<module>netty4-ch2-pojo</module>
 		<module>netty4-ch3-frame</module>
-		<module>netty4-ch4-serialization</module>
+		<module>netty4-ch4-codec</module>
 		<module>netty4-ch5-protocol</module>
 	</modules>
 

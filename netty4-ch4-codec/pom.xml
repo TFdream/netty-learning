@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>netty4-ch4-serialization</artifactId>
+    <artifactId>netty4-ch4-codec</artifactId>
     <packaging>jar</packaging>
 
-    <name>netty4-ch4-serialization</name>
+    <name>netty4-ch4-codec</name>
     <url>http://maven.apache.org</url>
 
     <properties>
