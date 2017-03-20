@@ -35,7 +35,6 @@ public class TimeClient {
             String resp = in.readLine(); //从服务端读入
             System.out.println("Now is : " +  resp);
         } catch (Exception e) {
-            e.printStackTrace();
             //不需要处理
         } finally {
             if(out != null ){

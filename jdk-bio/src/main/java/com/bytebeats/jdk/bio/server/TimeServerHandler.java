@@ -35,7 +35,6 @@ public class TimeServerHandler implements Runnable {
                 out.print(currentTime);    //向客户端写
             }
         } catch (Exception e) {
-            e.printStackTrace();
             if(in != null){
                 try {
                     in.close();
