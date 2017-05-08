@@ -19,6 +19,7 @@
 		<module>netty4-ch5-protocol</module>
 		<module>netty4-ch6-ssl</module>
 		<module>jdk-bio</module>
+		<module>netty4-rpc</module>
 	</modules>
 
 	<properties>
