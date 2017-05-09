@@ -1,12 +1,14 @@
-package com.bytebeats.netty4.rpc.ch1.client;
+package com.bytebeats.netty4.rpc.client;
 
-import com.bytebeats.netty4.rpc.ChannelWrapper;
-import com.bytebeats.netty4.rpc.InvokeCallback;
-import com.bytebeats.netty4.rpc.RpcFuture;
 import com.bytebeats.netty4.rpc.codec.RpcDecoder;
 import com.bytebeats.netty4.rpc.codec.RpcEncoder;
+import com.bytebeats.netty4.rpc.core.ChannelWrapper;
+import com.bytebeats.netty4.rpc.core.InvokeCallback;
+import com.bytebeats.netty4.rpc.core.NettyConnHandler;
+import com.bytebeats.netty4.rpc.core.RpcFuture;
 import com.bytebeats.netty4.rpc.model.Request;
 import com.bytebeats.netty4.rpc.model.Response;
+import com.bytebeats.netty4.rpc.util.NetUtils;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -46,14 +48,6 @@ public class NettyRpcClient {
 
     private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
 
-    private String host;
-    private int port;
-
-    public NettyRpcClient(String host, int port){
-        this.host = host;
-        this.port = port;
-    }
-
     public void start(){
         b.group(group).channel(NioSocketChannel.class)
                 .option(ChannelOption.TCP_NODELAY, true)
@@ -66,7 +60,8 @@ public class NettyRpcClient {
                                 new LengthFieldPrepender(4),
                                 new RpcDecoder(Response.class), //
                                 new RpcEncoder(Request.class), //
-                                new IdleStateHandler(0, 0, 5),
+                                new IdleStateHandler(0, 0, 60, TimeUnit.SECONDS),
+                                new NettyConnHandler(),
                                 new NettyClientHandler());
                     }
                 });
@@ -95,10 +90,9 @@ public class NettyRpcClient {
         this.group.shutdownGracefully();
     }
 
-    public Response sendSync(final Request request, long timeout, TimeUnit unit) throws Exception {
-        ChannelWrapper wrapper = getOrCreateChannelWrapper();
+    public Response sendSync(String address, final Request request, long timeout, TimeUnit unit) throws Exception {
+        Channel channel = getOrCreateChannel(address);
 
-        Channel channel = wrapper.getChannel();
         if (channel != null && channel.isActive()) {
 
             final RpcFuture<Response> rpcFuture = new RpcFuture<>(timeout, unit);
@@ -109,11 +103,11 @@ public class NettyRpcClient {
                 public void operationComplete(ChannelFuture future) throws Exception {
 
                     if (future.isSuccess()) {
-                        System.out.println("send success");
+                        log.info("send success, request id:{}", request.getId());
                         rpcFuture.setSendRequestSuccess(true);
                         return;
                     } else {
-                        System.out.println("send failure");
+                        log.info("send failure, request id:{}", request.getId());
                         rpcFutureTable.remove(request.getId());
                         rpcFuture.setSendRequestSuccess(false);
                         rpcFuture.setFailure(future.cause());
@@ -123,14 +117,13 @@ public class NettyRpcClient {
 
             return rpcFuture.get(timeout, unit);
         } else {
-            throw new IllegalArgumentException("channel not Active...");
+            throw new IllegalArgumentException("channel not active. request id:"+request.getId());
         }
     }
 
-    public void sendAsync(final Request request, long timeout, TimeUnit unit, final InvokeCallback callback) throws Exception {
-        ChannelWrapper wrapper = getOrCreateChannelWrapper();
+    public void sendAsync(String address, final Request request, long timeout, TimeUnit unit, final InvokeCallback callback) throws Exception {
 
-        Channel channel = wrapper.getChannel();
+        Channel channel = getOrCreateChannel(address);
         if (channel != null && channel.isActive()) {
 
             final RpcFuture<Response> rpcFuture = new RpcFuture<>(timeout, unit);
@@ -141,11 +134,12 @@ public class NettyRpcClient {
                 public void operationComplete(ChannelFuture future) throws Exception {
 
                     if (future.isSuccess()) {
-                        System.out.println("send success");
+                        log.info("send success, request id:{}", request.getId());
                         rpcFuture.setSendRequestSuccess(true);
                         return;
                     } else {
-                        System.out.println("send failure");
+                        log.info("send failure, request id:{}", request.getId());
+
                         rpcFutureTable.remove(request.getId());
                         rpcFuture.setSendRequestSuccess(false);
                         rpcFuture.setFailure(future.cause());
@@ -155,27 +149,27 @@ public class NettyRpcClient {
                 }
             });
         } else {
-            throw new RuntimeException("");
+            throw new IllegalArgumentException("channel not active. request id:"+request.getId());
         }
     }
 
-    public void sendOneway(Request request, long timeout, TimeUnit unit){
+    public void sendOneway(String address, final Request request, long timeout, TimeUnit unit){
 
-        ChannelWrapper wrapper = getOrCreateChannelWrapper();
-
-        Channel channel = wrapper.getChannel();
+        Channel channel = getOrCreateChannel(address);
         if (channel != null && channel.isActive()) {
             channel.writeAndFlush(request).addListener(new ChannelFutureListener() {
                 @Override
                 public void operationComplete(ChannelFuture future) throws Exception {
 
                     if (future.isSuccess()) {
-                        System.out.println("send success");
+                        log.info("send success, request id:{}", request.getId());
                     } else {
-                        System.out.println("send failure");
+                        log.info("send failure, request id:{}", request.getId(), future);
                     }
                 }
             });
+        } else {
+            throw new IllegalArgumentException("channel not active. request id:"+request.getId());
         }
     }
 
@@ -189,24 +183,42 @@ public class NettyRpcClient {
             RpcFuture future = rpcFutureTable.get(response.getId());
             future.setResult(response);
         }
-    }
 
-    private ChannelWrapper getOrCreateChannelWrapper(){
-        String address = String.format("%s:%d", host, port);
-        ChannelWrapper wrapper = channelTable.get(address);
-        if(wrapper==null){
-            wrapper = createChannel(host, port);
-            channelTable.put(address, wrapper);
+        @Override
+        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+            super.exceptionCaught(ctx, cause);
+            log.error("捕获异常", cause);
         }
-        return wrapper;
     }
 
-    private ChannelWrapper createChannel(String host, int port){
-        // 发起异步连接操作
-        ChannelFuture future = b.connect(
-                new InetSocketAddress(host, port));
+    private Channel getOrCreateChannel(String address){
 
-        return new ChannelWrapper(future);
+        ChannelWrapper cw = this.channelTable.get(address);
+        if (cw != null && cw.isActive()) {
+            return cw.getChannel();
+        }
+
+        synchronized (this){
+            // 发起异步连接操作
+            ChannelFuture channelFuture = b.connect(NetUtils.parseSocketAddress(address));
+            cw = new ChannelWrapper(channelFuture);
+            this.channelTable.put(address, cw);
+        }
+        if (cw != null) {
+            ChannelFuture channelFuture = cw.getChannelFuture();
+            long timeout = 5000;
+            if (channelFuture.awaitUninterruptibly(timeout)) {
+                if (cw.isActive()) {
+                    log.info("createChannel: connect remote host[{}] success, {}", address, channelFuture.toString());
+                    return cw.getChannel();
+                } else {
+                    log.warn("createChannel: connect remote host[" + address + "] failed, " + channelFuture.toString(), channelFuture.cause());
+                }
+            } else {
+                log.warn("createChannel: connect remote host[{}] timeout {}ms, {}", address, timeout, channelFuture);
+            }
+        }
+        return null;
     }
 
     /**定时清理超时Future**/

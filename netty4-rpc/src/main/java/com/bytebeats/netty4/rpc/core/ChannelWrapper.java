@@ -1,4 +1,4 @@
-package com.bytebeats.netty4.rpc;
+package com.bytebeats.netty4.rpc.core;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -36,8 +36,8 @@ public class ChannelWrapper {
         getChannel().close().addListener(new ChannelFutureListener() {
             @Override
             public void operationComplete(ChannelFuture future) throws Exception {
-                log.info("closeChannel: close the connection to remote address[{}] result: {}", getChannel().remoteAddress(),
-                        future.isSuccess());
+                log.info("closeChannel: close the connection to remote address:{}, result: {}",
+                        getChannel().remoteAddress(), future.isSuccess());
             }
         });
     }

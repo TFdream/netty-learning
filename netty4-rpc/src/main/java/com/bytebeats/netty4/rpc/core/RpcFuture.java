@@ -1,4 +1,4 @@
-package com.bytebeats.netty4.rpc;
+package com.bytebeats.netty4.rpc.core;
 
 import java.io.IOException;
 import java.util.concurrent.*;

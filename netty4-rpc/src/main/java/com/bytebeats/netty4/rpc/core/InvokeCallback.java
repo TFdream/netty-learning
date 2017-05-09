@@ -1,4 +1,4 @@
-package com.bytebeats.netty4.rpc;
+package com.bytebeats.netty4.rpc.core;
 
 /**
  * Created by Ricky on 2017/5/9.

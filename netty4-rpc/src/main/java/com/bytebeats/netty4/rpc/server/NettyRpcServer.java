@@ -1,9 +1,12 @@
-package com.bytebeats.netty4.rpc.ch1.server;
+package com.bytebeats.netty4.rpc.server;
 
 import com.bytebeats.netty4.rpc.codec.RpcDecoder;
 import com.bytebeats.netty4.rpc.codec.RpcEncoder;
+import com.bytebeats.netty4.rpc.core.NettyConnHandler;
 import com.bytebeats.netty4.rpc.model.Request;
 import com.bytebeats.netty4.rpc.model.Response;
+import com.bytebeats.netty4.rpc.model.RpcType;
+import com.bytebeats.netty4.rpc.util.NetUtils;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -36,17 +39,10 @@ public class NettyRpcServer {
     private EventLoopGroup workerGroup = new NioEventLoopGroup();
     private ServerBootstrap serverBootstrap = new ServerBootstrap();
 
-    private String host;
-    private int port;
-
     private ThreadPoolExecutor pool;
 
-    public NettyRpcServer(String host, int port) {
-        this.host = host;
-        this.port = port;
-    }
 
-    public void start(){
+    public void start(String address){
         this.serverBootstrap.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
                 .option(ChannelOption.SO_BACKLOG, 128) //
@@ -62,7 +58,8 @@ public class NettyRpcServer {
                                 new LengthFieldPrepender(4),
                                 new RpcDecoder(Request.class), //
                                 new RpcEncoder(Response.class), //
-                                new IdleStateHandler(0, 0, 5),
+                                new IdleStateHandler(0, 0, 60, TimeUnit.SECONDS),
+                                new NettyConnHandler(),
                                 new NettyServerHandler());
                     }
                 });
@@ -77,8 +74,8 @@ public class NettyRpcServer {
         });
 
         try {
-            this.serverBootstrap.bind(new InetSocketAddress(host, port)).sync();
-            log.info("Rpc Server start at host:{} port:{}", host, port);
+            this.serverBootstrap.bind(NetUtils.parseSocketAddress(address)).sync();
+            log.info("Rpc Server start at address:{}", address);
         } catch (InterruptedException e) {
             throw new RuntimeException("bind server error", e);
         }
@@ -100,6 +97,12 @@ public class NettyRpcServer {
             //处理请求
             processRpcRequest(context, request);
         }
+
+        @Override
+        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+            super.exceptionCaught(ctx, cause);
+            log.error("捕获异常", cause);
+        }
     }
 
     private void processRpcRequest(final ChannelHandlerContext context, final Request request) {
@@ -109,7 +112,7 @@ public class NettyRpcServer {
             public void run() {
 
                 int time = new Random().nextInt(500);
-                log.info("Rpc server process request:{}, time:{}", request.getId(), time);
+                log.info("Rpc server process request:{}, time:{} start...", request.getId(), time);
                 try {
                     TimeUnit.MILLISECONDS.sleep(time);
                 } catch (InterruptedException e) {
@@ -119,7 +122,10 @@ public class NettyRpcServer {
                 response.setId(request.getId());
                 response.setResult("Rpc Result:"+time);
 
-                context.writeAndFlush(response);
+                if(request.getType()!= RpcType.ONE_WAY){    //非单向调用
+                    context.writeAndFlush(response);
+                }
+                log.info("Rpc server process request:{}, time:{} end...", request.getId(), time);
             }
         });
     }
