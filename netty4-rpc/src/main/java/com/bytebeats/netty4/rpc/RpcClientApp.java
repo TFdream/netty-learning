@@ -25,7 +25,7 @@ public class RpcClientApp {
 
     public void run() throws InterruptedException {
 
-        RpcType type = RpcType.ONE_WAY;
+        RpcType type = RpcType.ASYNC;
 
         NettyRpcClient client = new NettyRpcClient();
         client.start();
@@ -66,7 +66,7 @@ public class RpcClientApp {
 
         System.out.println("***************客户端RPC调用结束***************");
 
-        TimeUnit.SECONDS.sleep(10);
+        TimeUnit.SECONDS.sleep(3);
 
         client.shutdown();
 

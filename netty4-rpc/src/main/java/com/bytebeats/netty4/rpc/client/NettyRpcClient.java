@@ -126,7 +126,7 @@ public class NettyRpcClient {
         Channel channel = getOrCreateChannel(address);
         if (channel != null && channel.isActive()) {
 
-            final RpcFuture<Response> rpcFuture = new RpcFuture<>(timeout, unit);
+            final RpcFuture<Response> rpcFuture = new RpcFuture<>(timeout, unit, callback);
             this.rpcFutureTable.put(request.getId(), rpcFuture);
             //写数据
             channel.writeAndFlush(request).addListener(new ChannelFutureListener() {
@@ -181,7 +181,12 @@ public class NettyRpcClient {
             final Response response = msg;
             log.info("Rpc client receive response id:{}", response.getId());
             RpcFuture future = rpcFutureTable.get(response.getId());
+
             future.setResult(response);
+            if(future.isAsync()){   //异步调用
+                log.info("Rpc client async callback invoke");
+                future.execCallback();
+            }
         }
 
         @Override

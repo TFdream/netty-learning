@@ -39,10 +39,9 @@ public class NettyRpcServer {
     private EventLoopGroup workerGroup = new NioEventLoopGroup();
     private ServerBootstrap serverBootstrap = new ServerBootstrap();
 
-    private ThreadPoolExecutor pool;
+    private ThreadPoolExecutor pool;    //业务处理线程池
 
-
-    public void start(String address){
+    public void start(final String address){
         this.serverBootstrap.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
                 .option(ChannelOption.SO_BACKLOG, 128) //
@@ -64,7 +63,7 @@ public class NettyRpcServer {
                     }
                 });
 
-        pool = new ThreadPoolExecutor(100, 200, 10, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new ThreadFactory() {
+        pool = new ThreadPoolExecutor(50, 100, 10, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new ThreadFactory() {
             private final AtomicInteger idGenerator = new AtomicInteger(0);
             @Override
             public Thread newThread(Runnable r) {
@@ -74,8 +73,21 @@ public class NettyRpcServer {
         });
 
         try {
-            this.serverBootstrap.bind(NetUtils.parseSocketAddress(address)).sync();
-            log.info("Rpc Server start at address:{}", address);
+            ChannelFuture channelFuture = this.serverBootstrap.bind(NetUtils.parseSocketAddress(address)).sync();
+
+            channelFuture.addListener(new ChannelFutureListener() {
+                @Override
+                public void operationComplete(ChannelFuture f) throws Exception {
+
+                    if(f.isSuccess()){
+                        log.info("Rpc Server start at address:{} success", address);
+                    } else {
+                        log.error("Rpc Server start at address:{} failure", address);
+                    }
+                }
+            });
+            System.out.println("Rpc Server start..."+address);
+
         } catch (InterruptedException e) {
             throw new RuntimeException("bind server error", e);
         }

@@ -20,6 +20,9 @@ public class RpcFuture<V> {
     private long timeout;
     private TimeUnit unit;
 
+    //异步回调
+    private InvokeCallback callback;
+
     public RpcFuture() {
     }
 
@@ -28,6 +31,25 @@ public class RpcFuture<V> {
         this.unit = unit;
     }
 
+    public RpcFuture(long timeout, TimeUnit unit, InvokeCallback callback) {
+        this.timeout = timeout;
+        this.unit = unit;
+        this.callback = callback;
+    }
+
+    public void execCallback(){
+        if(isDone()){
+            if(this.exc != null) {
+                this.callback.onFailure(this.exc);
+            } else {
+                this.callback.onSuccess(this.result);
+            }
+        }
+    }
+
+    public boolean isAsync() {
+        return this.callback!=null;
+    }
     public boolean isCancelled() {
         return this.exc == CANCELLED;
     }

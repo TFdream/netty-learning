@@ -1,7 +1,8 @@
 package com.bytebeats.netty4.rpc;
 
 import com.bytebeats.netty4.rpc.server.NettyRpcServer;
-import java.util.concurrent.TimeUnit;
+
+import java.util.concurrent.locks.LockSupport;
 
 /**
  * ${DESCRIPTION}
@@ -17,7 +18,7 @@ public class RpcServerApp {
         new RpcServerApp().run();
     }
 
-    public void run() throws InterruptedException {
+    public void run() {
 
         NettyRpcServer server = new NettyRpcServer();
         server.start(address);
@@ -25,8 +26,7 @@ public class RpcServerApp {
         //服务器启动完毕
         System.out.println("************服务器启动完成***********");
 
-
-        TimeUnit.MINUTES.sleep(3);
+        LockSupport.park();
 
         //服务器关闭
         server.shutdown();
