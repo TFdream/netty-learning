@@ -14,7 +14,18 @@ public class RpcFuture<V> {
     private volatile Throwable exc;
     private CountDownLatch latch;
 
+    //处理开始时间
+    private final long beginTimestamp = System.currentTimeMillis();
+    /**超时时间**/
+    private long timeout;
+    private TimeUnit unit;
+
     public RpcFuture() {
+    }
+
+    public RpcFuture(long timeout, TimeUnit unit) {
+        this.timeout = timeout;
+        this.unit = unit;
     }
 
     public boolean isCancelled() {
@@ -114,4 +125,13 @@ public class RpcFuture<V> {
     public void setSendRequestSuccess(boolean sendRequestSuccess) {
         this.sendRequestSuccess = sendRequestSuccess;
     }
+
+    public long getBeginTimestamp() {
+        return beginTimestamp;
+    }
+
+    public long getTimeoutMillis() {
+        return unit.toMillis(timeout);
+    }
+
 }

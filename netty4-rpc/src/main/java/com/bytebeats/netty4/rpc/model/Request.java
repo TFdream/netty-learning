@@ -1,9 +1,14 @@
 package com.bytebeats.netty4.rpc.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Ricky on 2017/5/9.
  */
-public class Request {
+public class Request implements Serializable {
+
+    private static final long serialVersionUID = 7677530698715070834L;
+
     private String id;
 
     public String getId() {

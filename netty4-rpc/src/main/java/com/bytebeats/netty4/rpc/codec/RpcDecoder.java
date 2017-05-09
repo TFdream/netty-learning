@@ -1,22 +1,37 @@
 package com.bytebeats.netty4.rpc.codec;
 
+import com.dyuproject.protostuff.ProtostuffIOUtil;
+import com.dyuproject.protostuff.Schema;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 /**
  * Created by Ricky on 2017/5/9.
  */
-public class RpcDecoder extends ByteToMessageDecoder {
-    private Class<?> genericClass;
+public class RpcDecoder<T> extends ByteToMessageDecoder {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public RpcDecoder(Class<?> genericClass) {
-        this.genericClass = genericClass;
+    private Class<T> type;
+
+    public RpcDecoder(Class<T> type) {
+        this.type = type;
     }
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf buf, List<Object> list) throws Exception {
 
+        int len = buf.readableBytes();
+        final byte[] arr = new byte[len];
+        buf.readBytes(arr);
+
+        Schema<T> schema = SchemaCache.getSchema(type);
+        T message = schema.newMessage();
+        ProtostuffIOUtil.mergeFrom(arr, message, schema);
+        list.add(message);
     }
 }
