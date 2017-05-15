@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>netty4-common</artifactId>
+    <artifactId>netty4-ssl-demo</artifactId>
     <packaging>jar</packaging>
 
-    <name>netty4-common</name>
+    <name>netty4-ssl-demo</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -18,6 +18,10 @@
     </properties>
 
     <dependencies>
-
+        <dependency>
+            <groupId>com.mindflow</groupId>
+            <artifactId>netty4-common</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
     </dependencies>
 </project>

@@ -1,16 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
+        <groupId>com.mindflow</groupId>
         <artifactId>netty4-in-action</artifactId>
-        <groupId>com.bytebeats.netty4</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>netty4-ch6-ssl</artifactId>
+    <artifactId>netty4-http-demo</artifactId>
     <packaging>jar</packaging>
 
-    <name>netty4-ch6-ssl</name>
+    <name>netty4-http-demo</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -18,37 +18,19 @@
     </properties>
 
     <dependencies>
-        <!-- Netty -->
         <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.bytebeats.netty4</groupId>
+            <groupId>com.mindflow</groupId>
             <artifactId>netty4-common</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
-        <!--log-->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
+            <groupId>com.caucho</groupId>
+            <artifactId>hessian</artifactId>
         </dependency>
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-        </dependency>
-
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>com.esotericsoftware</groupId>
+            <artifactId>kryo</artifactId>
         </dependency>
     </dependencies>
 </project>

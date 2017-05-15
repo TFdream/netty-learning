@@ -5,12 +5,13 @@
         <artifactId>netty4-in-action</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>netty4-common</artifactId>
+    <artifactId>netty4-echo-demo</artifactId>
     <packaging>jar</packaging>
 
-    <name>netty4-common</name>
+    <name>netty4-echo-demo</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -18,6 +19,11 @@
     </properties>
 
     <dependencies>
-
+        <dependency>
+            <groupId>com.mindflow</groupId>
+            <artifactId>netty4-common</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
     </dependencies>
+
 </project>

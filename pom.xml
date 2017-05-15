@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.bytebeats.netty4</groupId>
+	<groupId>com.mindflow</groupId>
 	<artifactId>netty4-in-action</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -11,31 +11,59 @@
 	<url>http://maven.apache.org</url>
 
 	<modules>
+		<module>java-bio-demo</module>
 		<module>netty4-common</module>
-		<module>netty4-ch1-echo</module>
-		<module>netty4-ch2-pojo</module>
-		<module>netty4-ch3-frame</module>
-		<module>netty4-ch4-codec</module>
-		<module>netty4-ch5-protocol</module>
-		<module>netty4-ch6-ssl</module>
-		<module>jdk-bio</module>
-		<module>netty4-rpc</module>
+		<module>netty4-echo-demo</module>
+		<module>netty4-pojo-demo</module>
+		<module>netty4-unpack-demo</module>
+		<module>netty4-codec-demo</module>
+		<module>netty4-http-demo</module>
+		<module>netty4-ssl-demo</module>
+		<module>netty4-rpc-demo</module>
 	</modules>
 
 	<properties>
+		<netty.version>4.1.6.Final</netty.version>
 		<java.version>1.7</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<dependencyManagement>
-		<dependencies>
+	<dependencies>
 		<!-- Netty -->
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-all</artifactId>
-			<version>4.1.6.Final</version>
+			<version>${netty.version}</version>
 		</dependency>
 
+		<!--log-->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.21</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>1.1.7</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.1.7</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
 		<!-- serialization  -->
 		<dependency>
 			<groupId>com.dyuproject.protostuff</groupId>
@@ -70,31 +98,6 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.7</version>
-		</dependency>
-
-		<!--log-->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.21</version>
-		</dependency>
-
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-core</artifactId>
-			<version>1.1.7</version>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>1.1.7</version>
-		</dependency>
-
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
 		</dependency>
 		</dependencies>
 	</dependencyManagement>
