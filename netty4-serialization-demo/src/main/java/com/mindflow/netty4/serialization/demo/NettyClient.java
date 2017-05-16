@@ -1,22 +1,17 @@
 package com.mindflow.netty4.serialization.demo;
 
 import com.mindflow.netty4.common.Constants;
+import com.mindflow.netty4.serialization.model.Request;
+import com.mindflow.netty4.serialization.model.Response;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.timeout.ReadTimeoutHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * ${DESCRIPTION}
@@ -41,24 +36,50 @@ public class NettyClient {
                         public void initChannel(SocketChannel ch)
                                 throws Exception {
                             ch.pipeline().addLast(
-                                    new NettyMessageDecoder(1024 * 1024, 4, 4));
+                                    new NettyMessageDecoder<Response>(Response.class, 1024 * 1024, 4, 4));
                             ch.pipeline().addLast("MessageEncoder",
                                     new NettyMessageEncoder());
                             ch.pipeline().addLast("readTimeoutHandler",
-                                    new ReadTimeoutHandler(50));;
+                                    new NettyClientHandler());;
                         }
                     });
             // 发起异步连接操作
             ChannelFuture future = b.connect(
-                    new InetSocketAddress(host, port)).sync();
+                    new InetSocketAddress(host, port));
 
-            logger.info("client connect host:{}, port:{}", host, port);
+            if (future.awaitUninterruptibly(5000)) {
+                logger.info("client connect host:{}, port:{}", host, port);
+                if (future.channel().isActive()) {
 
-            // 当对应的channel关闭的时候，就会返回对应的channel。
-            // Returns the ChannelFuture which will be notified when this channel is closed. This method always returns the same future instance.
-            future.channel().closeFuture().sync();
+                    for(int i=0; i<100; i++){
+
+                        Request req = new Request();
+                        req.setId((long) i);
+                        req.setMessage("hello world");
+
+                        future.channel().writeAndFlush(req);
+                    }
+                }
+            }
+
         } finally {
 
+        }
+    }
+
+    class NettyClientHandler extends SimpleChannelInboundHandler<Response> {
+
+        @Override
+        protected void channelRead0(ChannelHandlerContext channelHandlerContext, Response msg) throws Exception {
+
+            final Response response = msg;
+            logger.info("Rpc client receive response id:{}", response.getId());
+        }
+
+        @Override
+        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+            super.exceptionCaught(ctx, cause);
+            logger.error("捕获异常", cause);
         }
     }
 

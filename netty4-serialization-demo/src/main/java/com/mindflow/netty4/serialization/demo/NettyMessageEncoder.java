@@ -1,7 +1,7 @@
 package com.mindflow.netty4.serialization.demo;
 
 import com.mindflow.netty4.serialization.Serializer;
-import com.mindflow.netty4.serialization.model.Message;
+import com.mindflow.netty4.serialization.model.Request;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
@@ -12,12 +12,12 @@ import io.netty.handler.codec.MessageToByteEncoder;
  * @author Ricky Fung
  */
 public final class NettyMessageEncoder extends
-        MessageToByteEncoder<Message> {
+        MessageToByteEncoder<Request> {
 
     private Serializer serializer = SerializerFactory.getSerializer();
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, Message msg,
+    protected void encode(ChannelHandlerContext ctx, Request msg,
                           ByteBuf sendBuf) throws Exception {
 
         byte[] data = serializer.encode(msg);

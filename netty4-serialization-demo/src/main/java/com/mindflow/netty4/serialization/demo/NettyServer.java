@@ -1,19 +1,17 @@
 package com.mindflow.netty4.serialization.demo;
 
 import com.mindflow.netty4.common.Constants;
+import com.mindflow.netty4.serialization.model.Request;
+import com.mindflow.netty4.serialization.model.Response;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import io.netty.handler.timeout.ReadTimeoutHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 
 /**
@@ -35,10 +33,9 @@ public class NettyServer {
                     public void initChannel(SocketChannel ch)
                             throws IOException {
                         ch.pipeline().addLast(
-                                new NettyMessageDecoder(1<<20, 4, 4));
+                                new NettyMessageDecoder<Request>(Request.class,1<<20, 4, 4));
                         ch.pipeline().addLast(new NettyMessageEncoder());
-                        ch.pipeline().addLast("readTimeoutHandler",
-                                new ReadTimeoutHandler(50));;
+                        ch.pipeline().addLast(new NettyServerHandler());
                     }
                 });
 
@@ -50,5 +47,30 @@ public class NettyServer {
 
     public static void main(String[] args) throws Exception {
         new NettyServer().bind();
+    }
+
+    class NettyServerHandler extends SimpleChannelInboundHandler<Request> {
+
+        @Override
+        protected void channelRead0(ChannelHandlerContext context, Request request) throws Exception {
+
+            logger.info("Rpc server receive request id:{}", request.getId());
+            //处理请求
+            processRpcRequest(context, request);
+        }
+
+        @Override
+        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+            super.exceptionCaught(ctx, cause);
+            logger.error("捕获异常", cause);
+        }
+    }
+
+    private void processRpcRequest(final ChannelHandlerContext context, final Request request) {
+
+        Response response = new Response();
+        response.setId(request.getId());
+        response.setResult("echo "+request.getMessage());
+        context.writeAndFlush(response);
     }
 }
