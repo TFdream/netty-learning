@@ -1,7 +1,6 @@
 package com.mindflow.netty4.unpack.fixedlength;
 
 import com.mindflow.netty4.common.Constants;
-import com.sun.org.apache.xerces.internal.dom.PSVIAttrNSImpl;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;

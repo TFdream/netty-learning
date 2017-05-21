@@ -5,7 +5,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LineBasedClientHandler extends ChannelInboundHandlerAdapter {
+public class LineClientHandler extends ChannelInboundHandlerAdapter {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     private int count =0;

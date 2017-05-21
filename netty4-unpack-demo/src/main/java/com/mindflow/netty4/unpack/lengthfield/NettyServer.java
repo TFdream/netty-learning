@@ -62,12 +62,8 @@ public class NettyServer {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
-        try {
-            new NettyServer().bind(Constants.PORT);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        new NettyServer().bind(Constants.PORT);
     }
 }

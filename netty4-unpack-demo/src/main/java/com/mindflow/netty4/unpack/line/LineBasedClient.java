@@ -12,15 +12,7 @@ import io.netty.handler.codec.string.StringEncoder;
 
 public class LineBasedClient {
 
-	private String host;
-	private int port;
-
-	public LineBasedClient(String host, int port) {
-		this.host = host;
-		this.port = port;
-	}
-
-	public void send() throws InterruptedException {
+	public void connect(String host, int port) throws InterruptedException {
 
 		EventLoopGroup group = new NioEventLoopGroup();
 		try {
@@ -37,7 +29,7 @@ public class LineBasedClient {
 					p.addLast(new StringDecoder());
 					p.addLast(new StringEncoder());
 
-					p.addLast(new LineBasedClientHandler());
+					p.addLast(new LineClientHandler());
 				}
 			});
 
@@ -51,6 +43,6 @@ public class LineBasedClient {
 
 	public static void main(String[] args) throws Exception {
 
-		new LineBasedClient(Constants.HOST, Constants.PORT).send();
+		new LineBasedClient().connect(Constants.HOST, Constants.PORT);
 	}
 }

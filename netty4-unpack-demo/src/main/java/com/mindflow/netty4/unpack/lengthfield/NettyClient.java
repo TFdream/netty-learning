@@ -1,7 +1,6 @@
 package com.mindflow.netty4.unpack.lengthfield;
 
 import com.mindflow.netty4.common.Constants;
-import com.mindflow.netty4.unpack.delimiter.DelimiterClientHandler;
 import com.mindflow.netty4.unpack.model.Message;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -76,12 +75,8 @@ public class NettyClient {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
-        try {
-            new NettyClient().connect(Constants.HOST, Constants.PORT);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        new NettyClient().connect(Constants.HOST, Constants.PORT);
     }
 }

@@ -13,20 +13,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Netty4.x 字符串传递
+ *
  * @author Ricky
  *
  */
 public class LineBasedServer {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	private int port;
-
-	public LineBasedServer(int port) {
-		this.port = port;
-	}
-
-	public void run() throws Exception {
+	public void bind(int port) throws Exception {
 
 		EventLoopGroup bossGroup = new NioEventLoopGroup();
 		EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -44,7 +38,7 @@ public class LineBasedServer {
 					p.addLast(new StringDecoder());
 					p.addLast(new StringEncoder());
 
-					p.addLast(new LineBasedServerHandler());
+					p.addLast(new LineServerHandler());
 				}
 			});
 
@@ -64,6 +58,6 @@ public class LineBasedServer {
 
 	public static void main(String[] args) throws Exception {
 
-		new LineBasedServer(Constants.PORT).run();
+		new LineBasedServer().bind(Constants.PORT);
 	}
 }

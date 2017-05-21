@@ -14,20 +14,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Netty4.x 字符串传递
+ *
  * @author Ricky
  *
  */
 public class DelimiterServer {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	private int port;
 
-	public DelimiterServer(int port) {
-		this.port = port;
-	}
-
-	public void run() throws Exception {
+	public void bind(int port) throws Exception {
 
 		EventLoopGroup bossGroup = new NioEventLoopGroup(1);
 		EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -65,6 +60,6 @@ public class DelimiterServer {
 
 	public static void main(String[] args) throws Exception {
 
-		new DelimiterServer(Constants.PORT).run();
+		new DelimiterServer().bind(Constants.PORT);
 	}
 }
