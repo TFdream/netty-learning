@@ -1,12 +1,16 @@
 package com.mindflow.netty4.serialization.model;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 /**
  * @author Ricky Fung
  */
-public class Request {
+public class Request implements Serializable {
+
+    private static final long serialVersionUID = 7300070120633180514L;
+
     private Long id;
     private String message;
     private List<String> tags;

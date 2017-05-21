@@ -1,9 +1,14 @@
 package com.mindflow.netty4.serialization.model;
 
+import java.io.Serializable;
+
 /**
  * @author Ricky Fung
  */
-public class Response {
+public class Response implements Serializable{
+
+    private static final long serialVersionUID = 1937719690262222850L;
+
     private Long id;
     private String result;
 

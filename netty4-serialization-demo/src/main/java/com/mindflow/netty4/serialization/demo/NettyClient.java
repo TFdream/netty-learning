@@ -36,21 +36,18 @@ public class NettyClient {
                         public void initChannel(SocketChannel ch)
                                 throws Exception {
                             ch.pipeline().addLast(
-                                    new NettyMessageDecoder<Response>(Response.class, 1024 * 1024, 4, 4));
-                            ch.pipeline().addLast("MessageEncoder",
-                                    new NettyMessageEncoder());
-                            ch.pipeline().addLast("readTimeoutHandler",
-                                    new NettyClientHandler());;
+                                    new NettyMessageDecoder<Response>(Response.class, 1024 * 1024, 2, 4));
+                            ch.pipeline().addLast(new NettyMessageEncoder<Request>(Request.class));
+                            ch.pipeline().addLast(new NettyClientHandler());;
                         }
                     });
             // 发起异步连接操作
-            ChannelFuture future = b.connect(
-                    new InetSocketAddress(host, port));
+            ChannelFuture future = b.connect(host, port).sync();
 
             if (future.awaitUninterruptibly(5000)) {
                 logger.info("client connect host:{}, port:{}", host, port);
                 if (future.channel().isActive()) {
-
+                    logger.info("开始发送消息");
                     for(int i=0; i<100; i++){
 
                         Request req = new Request();
@@ -59,6 +56,7 @@ public class NettyClient {
 
                         future.channel().writeAndFlush(req);
                     }
+                    logger.info("发送消息完毕");
                 }
             }
 
@@ -78,7 +76,6 @@ public class NettyClient {
 
         @Override
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-            super.exceptionCaught(ctx, cause);
             logger.error("捕获异常", cause);
         }
     }

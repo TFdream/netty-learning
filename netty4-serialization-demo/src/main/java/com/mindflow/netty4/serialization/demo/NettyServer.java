@@ -33,20 +33,18 @@ public class NettyServer {
                     public void initChannel(SocketChannel ch)
                             throws IOException {
                         ch.pipeline().addLast(
-                                new NettyMessageDecoder<Request>(Request.class,1<<20, 4, 4));
-                        ch.pipeline().addLast(new NettyMessageEncoder());
+                                new NettyMessageDecoder<>(Request.class,1<<20, 2, 4));
+                        ch.pipeline().addLast(new NettyMessageEncoder(Response.class));
                         ch.pipeline().addLast(new NettyServerHandler());
                     }
                 });
 
         // 绑定端口，同步等待成功
-        b.bind(Constants.HOST, Constants.PORT).sync();
+        ChannelFuture future = b.bind(Constants.HOST, Constants.PORT).sync();
         logger.info("Netty server start ok host:{}, port:{}"
                 , Constants.HOST , Constants.PORT);
-    }
 
-    public static void main(String[] args) throws Exception {
-        new NettyServer().bind();
+        future.channel().closeFuture().sync();
     }
 
     class NettyServerHandler extends SimpleChannelInboundHandler<Request> {
@@ -61,7 +59,6 @@ public class NettyServer {
 
         @Override
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-            super.exceptionCaught(ctx, cause);
             logger.error("捕获异常", cause);
         }
     }
@@ -73,4 +70,9 @@ public class NettyServer {
         response.setResult("echo "+request.getMessage());
         context.writeAndFlush(response);
     }
+
+    public static void main(String[] args) throws Exception {
+        new NettyServer().bind();
+    }
+
 }

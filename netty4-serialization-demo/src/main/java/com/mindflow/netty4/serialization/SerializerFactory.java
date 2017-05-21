@@ -1,6 +1,5 @@
-package com.mindflow.netty4.serialization.demo;
+package com.mindflow.netty4.serialization;
 
-import com.mindflow.netty4.serialization.Serializer;
 import com.mindflow.netty4.serialization.hessian.HessianSerializer;
 
 /**
