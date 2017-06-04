@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>netty4-unpack-demo</artifactId>
+    <artifactId>netty4-frame-demo</artifactId>
     <packaging>jar</packaging>
 
-    <name>netty4-unpack-demo</name>
+    <name>netty4-frame-demo</name>
     <url>http://maven.apache.org</url>
 
     <properties>

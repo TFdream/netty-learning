@@ -15,7 +15,7 @@
         <module>netty4-common</module>
         <module>netty4-echo-demo</module>
         <module>netty4-pojo-demo</module>
-        <module>netty4-unpack-demo</module>
+        <module>netty4-frame-demo</module>
         <module>netty4-serialization-demo</module>
         <module>netty4-http-demo</module>
         <module>netty4-ssl-demo</module>
