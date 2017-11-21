@@ -3,27 +3,27 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.mindflow</groupId>
-    <artifactId>netty4-in-action</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>netty-tutorials</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>netty4-in-action</name>
+    <name>netty-tutorials</name>
     <url>http://maven.apache.org</url>
 
     <modules>
+        <module>utils</module>
         <module>java-bio-demo</module>
-        <module>netty4-common</module>
-        <module>netty4-echo-demo</module>
-        <module>netty4-pojo-demo</module>
-        <module>netty4-frame-demo</module>
-        <module>netty4-serialization-demo</module>
-        <module>netty4-http-demo</module>
-        <module>netty4-ssl-demo</module>
-        <module>netty4-rpc-demo</module>
+        <module>netty-echo-demo</module>
+        <module>netty-pojo-demo</module>
+        <module>netty-frame-demo</module>
+        <module>netty-serialization-demo</module>
+        <module>netty-http-demo</module>
+        <module>netty-ssl-demo</module>
+        <module>netty-rpc-demo</module>
     </modules>
 
     <properties>
-        <netty.version>4.1.9.Final</netty.version>
+        <netty.version>4.1.17.Final</netty.version>
         <hessian.version>4.0.38</hessian.version>
         <protostuff.version>1.0.12</protostuff.version>
         <kryo.version>4.0.0</kryo.version>
@@ -31,6 +31,8 @@
         <fastjson.version>1.2.31</fastjson.version>
         <msgpack.version>0.8.12</msgpack.version>
         <fst.version>2.50</fst.version>
+        <logback.version>1.2.3</logback.version>
+        <slf4j.version>1.7.25</slf4j.version>
         <java.version>1.7</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -47,18 +49,18 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.21</version>
+            <version>${slf4j.version}</version>
         </dependency>
 
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
-            <version>1.1.7</version>
+            <version>${logback.version}</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.1.7</version>
+            <version>${logback.version}</version>
         </dependency>
 
         <dependency>
@@ -68,33 +70,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>18.0</version>
-            </dependency>
-            <!-- Objenesis -->
-            <dependency>
-                <groupId>org.objenesis</groupId>
-                <artifactId>objenesis</artifactId>
-                <version>2.4</version>
-            </dependency>
-            <!-- serialization  -->
-            <dependency>
-                <groupId>com.dyuproject.protostuff</groupId>
-                <artifactId>protostuff-core</artifactId>
-                <version>${protostuff.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.dyuproject.protostuff</groupId>
-                <artifactId>protostuff-runtime</artifactId>
-                <version>${protostuff.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>

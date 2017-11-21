@@ -5,12 +5,13 @@
         <artifactId>netty-tutorials</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>java-bio-demo</artifactId>
+    <artifactId>netty-echo-demo</artifactId>
     <packaging>jar</packaging>
 
-    <name>java-bio-demo</name>
+    <name>${project.artifactId}</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -18,6 +19,11 @@
     </properties>
 
     <dependencies>
-
+        <dependency>
+            <groupId>com.mindflow</groupId>
+            <artifactId>utils</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
     </dependencies>
+
 </project>
