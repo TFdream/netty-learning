@@ -1,5 +1,5 @@
 # netty-tutorials
-Netty4 in action code.
+Netty 4.x tutorials. 
 
 ## Requirements
 The minimum requirements to run the quick start are:
