@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>com.mindflow</groupId>
-        <artifactId>netty-tutorials</artifactId>
+        <artifactId>netty-learning</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>com.mindflow</groupId>
-            <artifactId>utils</artifactId>
+            <artifactId>commons</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
@@ -63,11 +63,7 @@
             <version>${msgpack.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
+        <!-- jackson -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>

@@ -1,12 +1,11 @@
 package com.mindflow.netty4.common;
 
 /**
- * ${DESCRIPTION}
  *
  * @author Ricky Fung
  * @date 2016-12-15 11:22
  */
-public class ClassHelper {
+public abstract class ClassUtils {
 
     public static Class<?> forName(String name) throws ClassNotFoundException {
         return forName(name, getClassLoader());
@@ -17,7 +16,7 @@ public class ClassHelper {
     }
 
     public static ClassLoader getClassLoader() {
-        return getClassLoader(ClassHelper.class);
+        return getClassLoader(ClassUtils.class);
     }
 
     public static ClassLoader getClassLoader(Class<?> cls) {
