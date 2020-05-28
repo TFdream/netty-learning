@@ -19,6 +19,13 @@
     </properties>
 
     <dependencies>
+        <!-- Netty -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.mindflow</groupId>
             <artifactId>commons</artifactId>
