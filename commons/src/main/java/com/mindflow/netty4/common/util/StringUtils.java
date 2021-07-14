@@ -1,10 +1,8 @@
 package com.mindflow.netty4.common.util;
 
 /**
- * ${DESCRIPTION}
  *
  * @author Ricky Fung
- * @create 2016-10-31 10:19
  */
 public class StringUtils {
 

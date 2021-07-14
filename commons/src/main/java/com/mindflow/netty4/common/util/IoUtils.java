@@ -6,10 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * ${DESCRIPTION}
- *
  * @author Ricky Fung
- * @create 2016-10-31 10:19
  */
 public class IoUtils {
 

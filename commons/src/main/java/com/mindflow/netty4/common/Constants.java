@@ -2,6 +2,10 @@ package com.mindflow.netty4.common;
 
 import java.nio.charset.Charset;
 
+/**
+ *
+ * @author Ricky Fung
+ */
 public final class Constants {
 
 	public static final String HOST = System.getProperty("host", "127.0.0.1");

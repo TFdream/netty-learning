@@ -9,7 +9,6 @@ import java.util.Properties;
 /**
  *
  * @author Ricky Fung
- * @date 2016-08-18 14:27
  */
 public class PropertiesUtils {
 

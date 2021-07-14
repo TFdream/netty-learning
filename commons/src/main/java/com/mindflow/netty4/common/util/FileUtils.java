@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ${DESCRIPTION}
- *
  * @author Ricky Fung
- * @date 2016-08-19 15:56
  */
 public class FileUtils {
 

@@ -8,10 +8,8 @@ import java.io.StringReader;
 import java.io.StringWriter;
 
 /**
- * ${DESCRIPTION}
  *
  * @author Ricky Fung
- * @create 2017-01-08 21:06
  */
 public class JAXBUtils {
     public final static String CHARSET_NAME = "UTF-8";

@@ -3,7 +3,6 @@ package com.mindflow.netty4.common;
 /**
  *
  * @author Ricky Fung
- * @date 2016-12-15 11:22
  */
 public abstract class ClassUtils {
 
