@@ -77,8 +77,9 @@ public class NettyWsServer {
 
                         }
                     });
-            LOG.info("服务启动了, port={}", port);
+
             ChannelFuture future = bootstrap.bind(port).sync();
+            LOG.info("服务启动了, port={}", port);
             future.channel().closeFuture().sync();
         } finally {
             bossGroup.shutdownGracefully();
