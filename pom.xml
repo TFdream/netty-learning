@@ -20,6 +20,7 @@
         <module>netty-http-demo</module>
         <module>netty-ssl-demo</module>
         <module>netty-rpc-demo</module>
+        <module>netty-websocket-demo</module>
     </modules>
 
     <properties>
@@ -33,6 +34,7 @@
         <fastjson.version>1.2.75</fastjson.version>
         <msgpack.version>0.8.12</msgpack.version>
         <fst.version>2.50</fst.version>
+        <commons-codec.version>1.15</commons-codec.version>
         <logback.version>1.2.3</logback.version>
         <slf4j.version>1.7.30</slf4j.version>
         <junit.version>4.13.2</junit.version>
