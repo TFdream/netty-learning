@@ -9,17 +9,37 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author Ricky Fung
  */
-public class ChannelsManager {
+public class UserChannelManager {
     private static final AttributeKey<UserInfo> USER_KEY = AttributeKey.valueOf("_uid");
 
     private final ConcurrentHashMap<String, Channel> channelMap = new ConcurrentHashMap<>();
 
-    public static ChannelsManager getInstance() {
+    public static UserChannelManager getInstance() {
         return SingletonHolder.INSTANCE;
+    }
+
+    public Channel put(Channel channel) {
+        UserInfo userInfo = getUser(channel);
+        if (userInfo == null) {
+            return null;
+        }
+        return channelMap.put(userInfo.getNickname(), channel);
     }
 
     public Channel put(String key, Channel channel) {
         return channelMap.put(key, channel);
+    }
+
+    public Channel remove(String id) {
+        return channelMap.remove(id);
+    }
+
+    public Channel remove(Channel channel) {
+        UserInfo userInfo = getUser(channel);
+        if (userInfo == null) {
+            return null;
+        }
+        return channelMap.remove(userInfo.getNickname());
     }
 
     //=========
@@ -33,7 +53,7 @@ public class ChannelsManager {
 
     //=========
     private static class SingletonHolder {
-        private static final ChannelsManager INSTANCE = new ChannelsManager();
+        private static final UserChannelManager INSTANCE = new UserChannelManager();
 
     }
 }

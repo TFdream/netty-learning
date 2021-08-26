@@ -6,11 +6,17 @@
 </head>
 <body>
 <script>
+
+    const getParameterByName = (name, url = window.location.search) => {
+        let match = RegExp('[?&]' + name + '=([^&]*)').exec(url);
+        return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+    }
     var socket;
     //判断当前浏览器是否支持websocket
     if(window.WebSocket) {
         //go on
-        socket = new WebSocket("ws://localhost:8080/hello");
+        let token = getParameterByName("token");
+        socket = new WebSocket("ws://localhost:8080/hello?token="+token);
         //相当于channelReado, ev 收到服务器端回送的消息
         socket.onmessage = function (ev) {
             var rt = document.getElementById("responseText");
@@ -45,6 +51,7 @@
             alert("连接没有开启");
         }
     }
+
 </script>
 <form onsubmit="return false">
     <textarea name="message" style="height: 300px; width: 300px"></textarea>

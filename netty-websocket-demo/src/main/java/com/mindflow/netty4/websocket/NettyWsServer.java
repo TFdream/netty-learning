@@ -14,7 +14,6 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
-import io.netty.handler.timeout.IdleStateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +69,7 @@ public class NettyWsServer {
                             pipeline.addLast(new WebSocketServerProtocolHandler("/hello"));
 
                             // 读空闲60秒激发
-                            pipeline.addLast(new IdleStateHandler(60, 0, 0, TimeUnit.SECONDS));
+                            pipeline.addLast(new HeartbeatHandler(60, 0, 0, TimeUnit.SECONDS));
 
                             // 自定义handler，处理业务逻辑
                             pipeline.addLast(new SocketServerHandler());
