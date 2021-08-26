@@ -1,6 +1,8 @@
 package com.mindflow.netty4.websocket;
 
 import com.mindflow.netty4.common.util.NettyUtils;
+import com.mindflow.netty4.websocket.manager.UserChannelManager;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
@@ -23,7 +25,10 @@ public class HeartbeatHandler extends IdleStateHandler {
     protected void channelIdle(ChannelHandlerContext ctx, IdleStateEvent event) throws Exception {
         if (event == IdleStateEvent.FIRST_READER_IDLE_STATE_EVENT) {
             LOG.info("检测到客户端空闲，关闭连接, clientIp={}", NettyUtils.getClientIp(ctx));
-            ctx.close();
+            Channel channel = ctx.channel();
+            // Clear cache
+            UserChannelManager.getInstance().remove(channel);
+            channel.close();
             return;
         }
         super.channelIdle(ctx, event);

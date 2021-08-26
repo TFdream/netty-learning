@@ -17,8 +17,6 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * @author Ricky Fung
  */
@@ -26,7 +24,7 @@ public class NettyWsServer {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     public static void main(String[] args) throws Exception {
-        new NettyWsServer().start(8080);
+        new NettyWsServer().start(8088);
     }
 
     public void start(int port) throws InterruptedException {
@@ -35,7 +33,7 @@ public class NettyWsServer {
         EventLoopGroup workGroup = new NioEventLoopGroup();
         ServerBootstrap bootstrap = new ServerBootstrap();
         try{
-            bootstrap.group(bossGroup,workGroup)
+            bootstrap.group(bossGroup, workGroup)
                     .channel(NioServerSocketChannel.class)
                     .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(new ChannelInitializer<SocketChannel>() {
@@ -47,32 +45,23 @@ public class NettyWsServer {
                             pipeline.addLast(new HttpServerCodec());
                             //是以块方式写，添加ChunkedWriteHandler处理器
                             pipeline.addLast(new ChunkedWriteHandler());
+                            // http在传输过程中是分段的，这就是为什么当浏览器发送大量数据的时候，会发出多次http请求
+                            pipeline.addLast(new HttpObjectAggregator(1024 * 64));
 
-                            /*
-                            说明
-                                1. http数据在传输过程中是分段, HttpObjectAggregator ，就是可以将多个段聚合
-                                2. 这就就是为什么，当浏览器发送大量数据时，就会发出多次http请求
-                             */
-                            pipeline.addLast(new HttpObjectAggregator(8192));
-                            /*
-                            说明
-                                1. 对应websocket ，它的数据是以 帧(frame) 形式传递
-                                2. 可以看到WebSocketFrame 下面有六个子类
-                                3. 浏览器请求时 ws://localhost:8888/hello 表示请求的uri
-                                4. WebSocketServerProtocolHandler 核心功能是将 http协议升级为 ws协议 , 保持长连接
-                                5. 是通过一个 状态码 101
-                             */
+                            // WebSocket数据压缩
+                            //pipeline.addLast(new WebSocketServerCompressionHandler());
 
                             //用户身份鉴权
                             pipeline.addLast(new HttpRequestAuthHandler());
 
-                            pipeline.addLast(new WebSocketServerProtocolHandler("/hello"));
+                            //根据websocket规范，处理升级握手以及各种websocket数据帧
+                            pipeline.addLast(new WebSocketServerProtocolHandler("/hello", true,10000));
 
                             // 读空闲60秒激发
-                            pipeline.addLast(new HeartbeatHandler(60, 0, 0, TimeUnit.SECONDS));
+                            //pipeline.addLast(new HeartbeatHandler(5, 0, 0, TimeUnit.MINUTES));
 
                             // 自定义handler，处理业务逻辑
-                            pipeline.addLast(new SocketServerHandler());
+                            pipeline.addLast(new TextWebSocketHandler());
 
                         }
                     });

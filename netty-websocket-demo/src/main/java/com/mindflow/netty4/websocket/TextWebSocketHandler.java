@@ -2,6 +2,7 @@ package com.mindflow.netty4.websocket;
 
 import com.mindflow.netty4.websocket.entity.UserInfo;
 import com.mindflow.netty4.websocket.manager.UserChannelManager;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 /**
  * @author Ricky Fung
  */
-public class SocketServerHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
+public class TextWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     @Override
@@ -35,6 +36,12 @@ public class SocketServerHandler extends SimpleChannelInboundHandler<TextWebSock
     }
 
     @Override
+    public void handlerAdded(ChannelHandlerContext ctx) throws Exception { //
+        Channel incoming = ctx.channel();
+        LOG.info("客户端:" + incoming.remoteAddress() + "加入");
+    }
+
+    @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx);
         LOG.info("客户端断开连接：" + ctx.channel().id().asLongText());
@@ -47,4 +54,5 @@ public class SocketServerHandler extends SimpleChannelInboundHandler<TextWebSock
         UserChannelManager.getInstance().remove(ctx.channel());
         ctx.close();
     }
+
 }
