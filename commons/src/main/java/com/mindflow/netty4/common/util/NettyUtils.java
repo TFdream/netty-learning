@@ -22,6 +22,14 @@ public abstract class NettyUtils {
         return clientIp;
     }
 
+    public static String getChannelId(ChannelHandlerContext ctx) {
+        return ctx.channel().id().asShortText();
+    }
+
+    public static String getChannelId(Channel channel) {
+        return channel.id().asShortText();
+    }
+
     //==========
     public static String getUriParam(String requestUri, String paramName) {
         Map<String, String> map = parseUriParams(requestUri);

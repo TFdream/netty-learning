@@ -8,7 +8,6 @@ import com.mindflow.netty4.websocket.manager.UserChannelManager;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +30,7 @@ public class HttpRequestAuthHandler extends ChannelInboundHandlerAdapter {
                 token = NettyUtils.getUriParam(requestUri, "token");
             }
             LOG.info("用户身份鉴权开始, uri={}, token={}, channelId={}, clientIp={}",
-                    requestUri, token, ctx.channel().id().asLongText(), NettyUtils.getClientIp(ctx));
+                    requestUri, token, NettyUtils.getChannelId(ctx), NettyUtils.getClientIp(ctx));
 
             if (StringUtils.isNotEmpty(token)) {
                 //校验用户token
@@ -50,7 +49,8 @@ public class HttpRequestAuthHandler extends ChannelInboundHandlerAdapter {
                 // 传递到下一个handler：升级握手
                 ctx.fireChannelRead(request.retain());
 
-                LOG.info("用户身份鉴权-校验通过, uri={}, token={}", requestUri, token, userInfo.getNickname());
+                LOG.info("用户身份鉴权-校验通过, uri={}, token={}, nickname={}, channelId={}",
+                        requestUri, token, userInfo.getNickname(), NettyUtils.getChannelId(ctx));
             } else {
                 LOG.info("用户身份鉴权, 请先登录后再访问！");
                 ctx.channel().close();
@@ -60,11 +60,4 @@ public class HttpRequestAuthHandler extends ChannelInboundHandlerAdapter {
         }
     }
 
-    @Override
-    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-        if (evt instanceof WebSocketServerProtocolHandler.HandshakeComplete) {
-            LOG.info("客户端握手完成：" + ctx.channel().id().asLongText());
-        }
-        super.userEventTriggered(ctx, evt);
-    }
 }

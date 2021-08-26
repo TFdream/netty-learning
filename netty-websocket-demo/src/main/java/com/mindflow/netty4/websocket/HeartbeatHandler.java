@@ -24,7 +24,7 @@ public class HeartbeatHandler extends IdleStateHandler {
     @Override
     protected void channelIdle(ChannelHandlerContext ctx, IdleStateEvent event) throws Exception {
         if (event == IdleStateEvent.FIRST_READER_IDLE_STATE_EVENT) {
-            LOG.info("检测到客户端空闲，关闭连接, clientIp={}", NettyUtils.getClientIp(ctx));
+            LOG.info("检测到客户端空闲，关闭连接, channelId={}, clientIp={}", NettyUtils.getChannelId(ctx), NettyUtils.getClientIp(ctx));
             Channel channel = ctx.channel();
             // Clear cache
             UserChannelManager.getInstance().remove(channel);
