@@ -1,7 +1,5 @@
 package com.mindflow.netty4.common;
 
-import java.nio.charset.Charset;
-
 /**
  *
  * @author Ricky Fung
@@ -13,7 +11,4 @@ public final class Constants {
 
 	public static final String DELIMITER = "$#";
 
-	public final static String CHARSET_NAME = "UTF-8";
-
-	public final static Charset UTF_8 = Charset.forName(CHARSET_NAME);
 }
