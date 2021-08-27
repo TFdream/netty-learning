@@ -1,5 +1,8 @@
 package com.mindflow.netty4.websocket;
 
+import com.mindflow.netty4.websocket.handler.HeartbeatHandler;
+import com.mindflow.netty4.websocket.handler.HttpRequestAuthHandler;
+import com.mindflow.netty4.websocket.handler.TextWebSocketHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -14,8 +17,11 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import io.netty.util.concurrent.DefaultThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Ricky Fung
@@ -29,8 +35,8 @@ public class NettyWsServer {
 
     public void start(int port) throws InterruptedException {
         // 1.创建对应的EventLoopGroup对象
-        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-        EventLoopGroup workGroup = new NioEventLoopGroup();
+        EventLoopGroup bossGroup = new NioEventLoopGroup(1, new DefaultThreadFactory("boss"));
+        EventLoopGroup workGroup = new NioEventLoopGroup(new DefaultThreadFactory("worker"));
         ServerBootstrap bootstrap = new ServerBootstrap();
         try{
             bootstrap.group(bossGroup, workGroup)
@@ -55,10 +61,10 @@ public class NettyWsServer {
                             pipeline.addLast(new HttpRequestAuthHandler());
 
                             //根据websocket规范，处理升级握手以及各种websocket数据帧
-                            pipeline.addLast(new WebSocketServerProtocolHandler("/hello", true,10000));
+                            pipeline.addLast(new WebSocketServerProtocolHandler("/chat", true,10000));
 
                             // 读空闲60秒激发
-                            //pipeline.addLast(new HeartbeatHandler(5, 0, 0, TimeUnit.MINUTES));
+                            pipeline.addLast(new HeartbeatHandler(5, 0, 0, TimeUnit.MINUTES));
 
                             // 自定义handler，处理业务逻辑
                             pipeline.addLast(new TextWebSocketHandler());

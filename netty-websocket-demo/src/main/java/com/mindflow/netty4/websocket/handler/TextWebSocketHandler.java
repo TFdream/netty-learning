@@ -1,4 +1,4 @@
-package com.mindflow.netty4.websocket;
+package com.mindflow.netty4.websocket.handler;
 
 import com.mindflow.netty4.common.util.NettyUtils;
 import com.mindflow.netty4.websocket.entity.UserInfo;
