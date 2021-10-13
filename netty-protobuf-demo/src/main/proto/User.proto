@@ -1,0 +1,11 @@
+
+syntax = "proto3";
+
+option java_package = "com.mindflow.netty4.protobuf.model";
+option java_outer_classname = "UserModel";// 生成的外部类名，同时也是文件名
+
+// protobuf 使用 message 管理数据
+message User {
+  int32 id = 1;
+  string name = 2;
+}

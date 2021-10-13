@@ -3,7 +3,7 @@ Netty 4.x tutorials.
 
 ## Requirements
 The minimum requirements to run the quick start are:
-* JDK 1.7 or above
+* JDK 1.8 or above
 * A java-based project management software like Maven or Gradle
 
 ## 参考资料
